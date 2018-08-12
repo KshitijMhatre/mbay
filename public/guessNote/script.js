@@ -695,8 +695,21 @@ function AudioSynthView() {
 	});
 
 
+	function restart(){
+		document.getElementById('score').innerHTML = 0;
+		document.getElementById('life').innerHTML = 4;
+		document.getElementById('question').innerHTML =`
+			<h2> Guess the note being played.. </h2>
+                <button id="next">Play</button>
+                <div id="options" style="margin-top: 10px;"></div>
+		`;
+		game();
+	}
 
     function game() {
+
+		document.getElementById('next').style.display = 'none';	
+		document.getElementById('next').addEventListener('click', game);	
 
         var notes=['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
         var scales =['-1','0','1'];
@@ -725,6 +738,15 @@ function AudioSynthView() {
 
         options.forEach(op => {
             document.getElementById(op).addEventListener('click',function(){
+
+				document.getElementById('next').className = 'keyboard-options';
+				document.getElementById('next').style = `
+					margin: 0 0 2em 0;
+					font-family: "Raleway",'Arial';
+					font-size: 1.5em;
+				`;
+
+
                 if(op==note){
                     //console.log("Correct");
                     //game();
@@ -743,7 +765,10 @@ function AudioSynthView() {
                         document.getElementById('life').innerHTML = life -1;
                     }else{
                         document.getElementById('life').innerHTML = life -1;
-                        document.getElementById('question').innerHTML = '<h1>Game Over</h1>';   
+						document.getElementById('question').innerHTML = `<h1>Game Over</h1>
+							<br><button id="restart">Replay</button>
+						`;   
+						document.getElementById('restart').addEventListener('click',restart);
                     }
                 }
             });
